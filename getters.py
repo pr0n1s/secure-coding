@@ -27,5 +27,12 @@ def getMaxAddress(proj):
 def isStackExecable(proj):
 	return proj.loader.main_object.execstack
 
+# Symbol by name
 def getSymbol(proj, name):
 	return proj.loader.find_symbol(name)
+
+def getSegments(proj):
+	return proj.loader.main_object.segments
+
+def getSections(proj):
+	return proj.loader.main_object.sections
