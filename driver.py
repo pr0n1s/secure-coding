@@ -3,4 +3,6 @@
 # Author: pr0n1s
 # Credits: angr (shellphish)
 
-import angr
+import angr, getters
+
+proj = angr.Project('CADET_00001/CADET_00001.adapted')

@@ -24,7 +24,7 @@ def getMaxAddress(proj):
 	return proj.loader.max_addr
 
 # Stack executable?
-def isStackExecable(proj):
+def getIsStackExecutable(proj):
 	return proj.loader.main_object.execstack
 
 # Symbol by name
@@ -36,3 +36,9 @@ def getSegments(proj):
 
 def getSections(proj):
 	return proj.loader.main_object.sections
+
+def getElfObjects(proj):
+	return proj.loader.all_elf_objects
+
+def getBlock(proj, address):
+	return proj.factory.block(address).pp()
