@@ -22,7 +22,7 @@ curs = g.db.execute("SELECT quiz_name FROM Quizzes WHERE quiz_name LIKE '%%%s%%'
 
 	Fix:
 	====
-		Parameterize user input
+	Parameterize user input
 
 Database:
 =========
@@ -30,7 +30,7 @@ Database:
 
 	Proof
 	=====
-		sqlite3.Warning: You can only execute one statement at a time
+	sqlite3.Warning: You can only execute one statement at a time
 
 Framework:
 ==========
