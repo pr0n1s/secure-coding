@@ -38,7 +38,7 @@ Framework:
 
 	Proof:
 	======
-		main.py:14: FlaskWTFDeprecationWarning: "flask_wtf.Form" has been renamed to "FlaskForm" and will be removed in 1.0.
+	main.py:14: FlaskWTFDeprecationWarning: "flask_wtf.Form" has been renamed to "FlaskForm" and will be removed in 1.0.
 
 [*] Get Creds [*]
 =================
