@@ -80,7 +80,7 @@ It appears this server was misconfigured... Easy authentication bypass.
 
 Easter Egg
 ==========
-	This application is not vulnerable to the Werkzeug - Debug Shell Command Execution.
+This application is not vulnerable to the Werkzeug - Debug Shell Command Execution.
 
-	Therefore, in order to get the SECRET_KEY run the following:
-		docker run -it --entrypoint /bin/bash uofmcomp4432/exercise1:v1.
+Therefore, in order to get the SECRET_KEY run the following:
+	docker run -it --entrypoint /bin/bash uofmcomp4432/exercise1:v1.
