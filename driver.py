@@ -3,29 +3,48 @@
 # Author: pr0n1s
 # Credits: angr (shellphish)
 
-import angr
+import angr, logging
 
-proj = angr.Project('./bo')
+def dowork(sm):
+	ss = []
+	while len(sm.unconstrained) == 0:
+		sm.step()
+		ss.append(sm.stashes['active'])
+	crash = sm.unconstrained[0].posix.dumps(0)
+	return crash, ss
 
-print "[*] Simulation in progress: Detecting buffer overflow"
-print "[*] *************************************************"
-sm = proj.factory.simulation_manager(save_unconstrained=True)
+def getblock(proj, entry):
+	block = proj.factory.block(entry)
+	return block
 
-ss = []
-while len(sm.unconstrained) == 0:
-	sm.step()
-	ss.append(sm.stashes['active'])
+def getsegfault(ss):
+	return ss[-2]
 
-crash = sm.unconstrained[0].posix.dumps(0)
+def getinputlen(crash):
+	return len(repr(crash).split('\\'))-1
 
-print "[*] Simulation completed"
-print "[*] ********************"
-print "[*] Seg Fault @: {}".format(simstates[-2])
-print "[*] -------------------------------------"
-print "[*] Trace:"
-print "[*] ------"
-for s in ss:
-	print "\t{}".format(s)
-print "[*] Input length: {}".format(len(repr(crash).split('\\'))-1)
-print "[*] -----------------"
-print "[*] Input: {}".format(repr(crash))
+def display(crash, ss):
+  print "[*] Simulation completed"
+  print "[*] ********************"
+  print "[*] Seg Fault @: {}".format(getsegfault(ss))
+  print "[*] -------------------------------------"
+  print "[*] Trace:"
+  print "[*] ------"
+  for s in ss:
+    print "\t{}".format(s)
+  print "[*] Input length: {}".format(getinputlen(crash))
+  print "[*] -----------------"
+  print "[*] Input: {}".format(repr(crash))
+
+def main():
+	proj = angr.Project('./bo')
+	sm = proj.factory.simulation_manager(save_unconstrained=True)
+
+	print "[*] Simulation in progress: Detecting buffer overflow"
+	print "[*] *************************************************"
+	crash, ss = dowork(sm)
+	display(crash, ss)
+
+if __name__ == '__main__':
+	logging.getLogger('angr').setLevel('ERROR')
+	main()
