@@ -1,4 +1,4 @@
-Secure Codeing Quiz 2 (Template Injection
+Secure Coding Quiz 2 (Template Injection)
 -----------------------------------------
 
 TODO
