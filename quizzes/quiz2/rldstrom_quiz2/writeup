@@ -1,0 +1,91 @@
+Quiz 2: Secure Coding
+Professor: Dr. Neel
+Creator: John Shrein
+Student: Robert Edstrom (pr0n1s)
+================================
+<(' '<) <(' ')> (>' ')> <(' ')>
+================================
+
+Information
+===========
+	We are given a docker containing the same app from Quiz 1, however this app has some additions.
+		1. It is now using a randomly generated SECRET_KEY
+		2. Cryptographically signed session key
+		3. A new page: addCourse, that would seem to be only accessible by the admin
+
+Step 1
+=======
+	Discover the SECRET_KEY...
+
+	First, we need to login as a user that we obtained from Quiz1. For this writeup I am using the following user:
+		brknleg:jo30brotherS16
+
+	After logging in we should test if we can access the config by using the following template injection:
+		http://localhost:5000/profile{{config.items()}}
+
+	Now we have the SECRET_KEY, on to the next step.
+
+	Proof
+	-----
+		quiz2_SECRET_KEY.png
+
+		Injection
+		---------
+			http://localhost:5000/profile{{config.items()}}
+
+Step 2
+======
+	Well, what good does this do if we don't know how to use it...
+	
+	First, let's see what it currently contains by base64 decoding it:
+		pr0n1s@pr0n1s:~/git/secure-coding/quizzes/quiz1$ echo "eyJ1c2VybmFtZSI6ImJya25sZWcifQ.DXvhhw. /
+		f4_STyPK_KMpsiQ6rg_AFmLrJzM" | base64 --decode
+		{"username":"brknleg"}
+
+	Now we know the format of the session token. It would appear we should set the username to admin, but it is not 
+	going to be that easy. Therefore, research is required... What do we know already:
+		
+		*This is a Flask app which may be using the default flask sessions... let's have a looksee.
+
+		Google Search
+		-------------
+			flask site:github.com
+
+		Wallah
+		------
+			https://github.com/pallets/flask/blob/master/flask/sessions.py
+
+	More research... It appears flask session.py is using another Module:
+	
+		http://pythonhosted.org/itsdangerous/
+
+	This leads me to believe we should try the default settings, but where are they? Look at lines 323 - 330.
+
+Step 3
+======
+	Pythonism
+
+	Create a python script to mimick what flask session.py is doing:
+		dowork.py
+
+Step 4
+======
+
+	After some testing I was able to work out the following kinks:
+		* The json object key/value needed to be unicode
+		* The digest method didn't contain the new() function therefore staticmethod had to removed
+		* The datetime set in the config.items() output was irrelevent and could be disregarded (None)
+	
+	Otherwise, everything else was the default value. Now, let's get our signed admin token and navigate to the addCourse
+	page to prove we have successfully became the admin.
+
+Step 5
+======
+	To get the signed admin token simply copy the SECRET_KEY, and paste it into the python script. Next, open up the
+	dev tools in Google-Chrome, go to Application, Cookies, and paste in the signed admin token. Now, navigate to the
+	profile page, and wallah you are now the admin. Simply, type in the URL: http://localhost:5000/addCourse.
+
+	Proof:
+	------
+		quiz2_admin.png
+		quiz2_courseadded.png
